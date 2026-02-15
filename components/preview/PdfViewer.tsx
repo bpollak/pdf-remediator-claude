@@ -41,7 +41,7 @@ export function PdfViewer({ pdfBytes, label, onPageChange, currentPage }: PdfVie
     async function loadPdf() {
       try {
         const pdfjsLib = await import('pdfjs-dist');
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         const doc = await pdfjsLib.getDocument({ data: pdfBytes, isEvalSupported: false }).promise;
         if (cancelled) return;
         pdfDocRef.current = doc;

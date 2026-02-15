@@ -145,7 +145,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   toggleDarkMode: () => {
     set((state) => {
       const next = !state.darkMode;
-      document.documentElement.classList.toggle('dark', next);
+      if (typeof document !== 'undefined') {
+        document.documentElement.classList.toggle('dark', next);
+      }
       return { darkMode: next };
     });
   },
