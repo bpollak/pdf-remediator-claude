@@ -1,10 +1,13 @@
 /// <reference lib="webworker" />
 
-import * as pdfjsLib from 'pdfjs-dist';
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 
-// Configure pdf.js worker
-// In a web worker context, we need to disable the nested worker or point to the correct source
-pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+// Set the worker source to the copy in /public.
+// This file is copied from node_modules/pdfjs-dist/build/pdf.worker.min.mjs
+// during the build or can be served from a CDN.
+if (typeof GlobalWorkerOptions !== 'undefined') {
+  GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+}
 
 // We'll import our parser logic inline since workers can't use path aliases
 // The actual parsing logic:
@@ -31,7 +34,7 @@ ctx.addEventListener('message', async (event: MessageEvent<ParseRequest>) => {
     });
 
     // Load document
-    const loadingTask = pdfjsLib.getDocument({
+    const loadingTask = getDocument({
       data: buffer,
       useSystemFonts: true,
       isEvalSupported: false,
